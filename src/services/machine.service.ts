@@ -1,7 +1,7 @@
 import { api } from "./api";
 import type { Machine, MachineInput } from "@/types/machine";
 
-const BASE = "/v1/machines";
+const BASE = "api/v1/machines";
 
 interface DataResponse<T> {
   success: boolean;
