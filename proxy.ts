@@ -4,8 +4,8 @@ import { NextResponse, type NextRequest } from "next/server";
 const PUBLIC_PREFIXES = ["/login", "/register", "/forgot-password", "/reset-password", "/auth"];
 
 export function proxy(request: NextRequest) {
-  Turn this off when the API lives on another domain: this proxy can only see
-  cookies that are set for the frontend's own domain.
+  // Turn this off when the API lives on another domain: this proxy can only see
+  // cookies that are set for the frontend's own domain.
   if (process.env.AUTH_COOKIE_GUARD === "false") return NextResponse.next();
 
   const { pathname, search } = request.nextUrl;
