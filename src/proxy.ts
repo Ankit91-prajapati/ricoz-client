@@ -1,44 +1,47 @@
-// proxy.ts (project root, or src/proxy.ts)
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
 
-const protectedRoutes = ['/home', '/dashboard', '/profile']
-const authRoutes = ['/login', '/register']
+import { NextResponse, type NextRequest } from "next/server";
+
+const PUBLIC_ROUTES = [
+  "/login",
+  "/register",
+  "/forgot-password",
+  "/reset-password",
+  "/auth",
+];
 
 export function proxy(request: NextRequest) {
-  const { pathname } = request.nextUrl
+  const { pathname, search } = request.nextUrl;
 
-  // Replace "session" with your actual auth cookie name
-  const token = request.cookies.get('accessToken')?.value
-  const isAuthenticated = Boolean(token)
+  const hasSession =
+    !!request.cookies.get("accessToken")?.value ||
+    !!request.cookies.get("refreshToken")?.value;
 
-  const isProtected = protectedRoutes.some(
+  const isPublic = PUBLIC_ROUTES.some(
     (route) => pathname === route || pathname.startsWith(`${route}/`)
-  )
-  const isAuthRoute = authRoutes.includes(pathname)
+  );
 
-  // Not signed in -> send to signin, remember where they were going
-  if (isProtected && !isAuthenticated) {
-    const url = new URL('/signin', request.url)
-    url.searchParams.set('callbackUrl', pathname)
-    return NextResponse.redirect(url)
+  // Redirect signed-in users away from login and register
+  if (isPublic && hasSession) {
+    return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
-  // Already signed in -> keep them out of signin/signup
-  if (isAuthRoute && isAuthenticated) {
-    return NextResponse.redirect(new URL('/dashboard', request.url))
+  // Allow public pages
+  if (isPublic) {
+    return NextResponse.next();
   }
 
-  return NextResponse.next()
+  // Redirect signed-out users to login
+  if (!hasSession) {
+    const url = new URL("/login", request.url);
+    url.searchParams.set("next", pathname + search);
+    return NextResponse.redirect(url);
+  }
+
+  return NextResponse.next();
 }
 
 export const config = {
   matcher: [
-    '/home/:path*',
-    '/dashboard/:path*',
-    '/profile/:path*',
-    '/login',
-     '/register'
-   
+    "/((?!api|_next/static|_next/image|favicon.ico|.*\\..*).*)",
   ],
-}
+};
