@@ -2,7 +2,6 @@
 
 
 import { Suspense } from "react";
-import ProtectedShell from "@/components/layout/AppShell";
 import { FullScreenSpinner } from "@/components/ui/Spinner";
 import AppShell from "@/components/layout/AppShell";
 
