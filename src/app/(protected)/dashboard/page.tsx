@@ -55,7 +55,7 @@ export default function DashboardPage() {
           </button>
         )}
       </div>
-      <p className="mt-1 text-sm text-slate-400">Jump into any module to get started.</p>
+      <p className="mt-1 text-sm text-slate-400"><Link href="/info"></Link></p>
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {navGroups.map((group) => {
