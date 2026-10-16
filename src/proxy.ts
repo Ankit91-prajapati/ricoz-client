@@ -1,47 +1,44 @@
+// proxy.ts (project root, or src/proxy.ts)
+import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
 
-import { NextResponse, type NextRequest } from "next/server";
-
-const PUBLIC_PREFIXES = [
-  "/login",
-  "/register",
-  "/forgot-password",
-  "/reset-password",
-  "/auth",
-];
+const protectedRoutes = ['/home', '/dashboard', '/profile']
+const authRoutes = ['/login', '/register']
 
 export function proxy(request: NextRequest) {
-  const { pathname, search } = request.nextUrl;
+  const { pathname } = request.nextUrl
 
-  // Allow public authentication pages
-  const isPublic = PUBLIC_PREFIXES.some(
-    (path) => pathname === path || pathname.startsWith(`${path}/`)
-  );
+  // Replace "session" with your actual auth cookie name
+  const token = request.cookies.get('accessToken')?.value
+  const isAuthenticated = Boolean(token)
 
-  if (isPublic) {
-    return NextResponse.next();
+  const isProtected = protectedRoutes.some(
+    (route) => pathname === route || pathname.startsWith(`${route}/`)
+  )
+  const isAuthRoute = authRoutes.includes(pathname)
+
+  // Not signed in -> send to signin, remember where they were going
+  if (isProtected && !isAuthenticated) {
+    const url = new URL('/signin', request.url)
+    url.searchParams.set('callbackUrl', pathname)
+    return NextResponse.redirect(url)
   }
 
-  // Redirect the root page to login
-  if (pathname === "/") {
-    return NextResponse.redirect(new URL("/login", request.url));
+  // Already signed in -> keep them out of signin/signup
+  if (isAuthRoute && isAuthenticated) {
+    return NextResponse.redirect(new URL('/dashboard', request.url))
   }
 
-  // Check session cookies
-  const hasSession =
-    Boolean(request.cookies.get("accessToken")?.value) ||
-    Boolean(request.cookies.get("refreshToken")?.value);
-
-  if (!hasSession) {
-    const loginUrl = new URL("/login", request.url);
-    loginUrl.searchParams.set("next", pathname + search);
-    return NextResponse.redirect(loginUrl);
-  }
-
-  return NextResponse.next();
+  return NextResponse.next()
 }
 
 export const config = {
   matcher: [
-    "/((?!api|_next/static|_next/image|favicon.ico|.*\\..*).*)",
+    '/home/:path*',
+    '/dashboard/:path*',
+    '/profile/:path*',
+    '/login',
+     '/register'
+   
   ],
-};
+}
