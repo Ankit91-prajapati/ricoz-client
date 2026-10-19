@@ -71,7 +71,7 @@ function LoginForm() {
   Click Here
 </Link>
 </div>
-      <form onSubmit={onSubmit} noValidate className="space-y-5">
+      <form onSubmit={onSubmit}  className="space-y-5">
         <Input
           label="Email"
           type="email"

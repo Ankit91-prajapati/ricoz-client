@@ -21,7 +21,7 @@ export const authService = {
   // Used on app start to restore the session.
   refresh: () => api.post<AuthResponse>("/auth/refresh").then((r) => r.data),
 
-  logout: () => api.post<ApiResponse>("api/auth/logout").then((r) => r.data),
+  logout: () => api.post<ApiResponse>("/auth/logout").then((r) => r.data),
 
   forgotPassword: (email: string) =>
     api.post<ApiResponse>("/auth/forgot-password", { email }).then((r) => r.data),
