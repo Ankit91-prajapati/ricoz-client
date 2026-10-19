@@ -25,3 +25,14 @@ export function findMeta(list: readonly OptionMeta[], value: string): OptionMeta
     }
   );
 }
+
+/** A populated User reference. The API may send `name` or `username` depending on the populate fields. */
+export interface UserRef {
+  _id: string;
+  username?: string;
+  name?: string;
+  email?: string;
+}
+
+export const userName = (u?: UserRef | null) => u?.username ?? u?.name ?? u?.email ?? "—";
+
