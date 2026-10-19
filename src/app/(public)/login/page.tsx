@@ -60,7 +60,17 @@ function LoginForm() {
         </>
       }
     >
-      <div><Link href="/info" className="text-4xl text-orange-200">Information page</Link></div>
+      <div>
+        <h2 className="text-lg" >
+           For Information About Application
+        </h2>
+       <Link
+  href="/info"
+  className="bg-linear-to-r from-blue-600 to-indigo-600 text-xl font-semibold rounded-2xl px-1  text-orange-100 shadow-md transition-transform duration-300  hover:text-white"
+>
+  Click Here
+</Link>
+</div>
       <form onSubmit={onSubmit} noValidate className="space-y-5">
         <Input
           label="Email"
