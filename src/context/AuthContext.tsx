@@ -32,6 +32,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     let active = true;
     authService
+      
       .refresh()
       .then((res) => active && setUser(res.user))
       .catch(() => active && setUser(null))
