@@ -21,13 +21,13 @@ api.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
     const original = error.config as RetriableConfig | undefined;
-    const isAuthCall = original?.url?.startsWith("/auth/");
+    const isAuthCall = original?.url?.startsWith("api/auth/");
 
     // Access token expired -> refresh once, then replay the original request.
     if (error.response?.status === 401 && original && !original._retry && !isAuthCall) {
       original._retry = true;
       try {
-        refreshPromise ??= api.post("/auth/refresh").finally(() => {
+        refreshPromise ??= api.post("/api/auth/refresh").finally(() => {
           refreshPromise = null;
         });
         await refreshPromise;

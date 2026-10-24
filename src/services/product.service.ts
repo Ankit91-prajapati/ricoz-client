@@ -2,7 +2,7 @@ import { api } from "./api";
 import type { Product, ProductInput } from "@/types/product";
 
 // Your backend mounts products at /api/v1/products and api.ts already ends with /api
-const BASE = "/v1/products";
+const BASE = "/api/v1/products";
 
 interface DataResponse<T> {
   success: boolean;
