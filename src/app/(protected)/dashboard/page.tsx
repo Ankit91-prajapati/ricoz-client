@@ -74,7 +74,7 @@ export default function DashboardPage() {
               className="rounded-xl border border-slate-800 bg-slate-900 p-5 transition hover:shadow-xl hover:border-blue-500/40"
             >
               <div className="flex items-center gap-3">
-                <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md">
+                <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-linear-to-r from-blue-600 to-indigo-600 text-white shadow-md">
                   <Icon className="h-5 w-5" />
                 </span>
                 <h2 className="font-semibold text-slate-200">{group.label}</h2>

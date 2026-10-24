@@ -8,7 +8,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { setSessionExpiredHandler } from "@/services/api";
+
 import { authService } from "@/services/auth.service";
 import type { LoginPayload, RegisterPayload, User } from "@/types/auth";
 
@@ -43,10 +43,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   // Refresh failed on a later request -> drop the user; <ProtectedShell> redirects to /login.
-  useEffect(() => {
-    setSessionExpiredHandler(() => setUser(null));
-    return () => setSessionExpiredHandler(null);
-  }, []);
+  
 
   const login = useCallback(async (data: LoginPayload) => {
     const res = await authService.login(data);
